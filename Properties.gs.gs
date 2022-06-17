@@ -9,6 +9,7 @@
 function saveUserCredentails(userId, data) {
   try {
     // const scriptProperties = PropertiesService.getScriptProperties();
+    // Logger.log(scriptProperties.getKeys())
     const userProperties = PropertiesService.getUserProperties();
     userProperties.setProperty(userId, JSON.stringify(data));
   } catch (err) {

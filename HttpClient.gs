@@ -44,7 +44,8 @@ function login() {
     'payload': JSON.stringify(data)
   };
   Logger.log(options)
-  // const response = UrlFetchApp.fetch(url, options);
+  const response = UrlFetchApp.fetch(url, options);
+  Logger.log(response)
   // saveUserCredentails('bill', response)
 }
 
