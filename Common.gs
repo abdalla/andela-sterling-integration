@@ -1,0 +1,3 @@
+function GetGreeting() {
+    return "helloooooooo "
+}
