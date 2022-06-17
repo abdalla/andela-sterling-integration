@@ -17,7 +17,7 @@ function getScreen(name) {
 }
 
 // https://developers.google.com/apps-script/reference/url-fetch/url-fetch-app#advanced-parameters
-
+const BASE_URL = 'https://api.us.int.sterlingcheck.app/v2'
 /**
  * curl -X POST \
     -H "Authorization: Basic <basic auth token>" \
@@ -26,14 +26,14 @@ function getScreen(name) {
     https://api.us.int.sterlingcheck.app/v2/oauth
  */
 function login() {
-  var url = 'https://api.us.int.sterlingcheck.app/v2/oauth'
-  var blob = Utilities.newBlob("client_id:client_secret")
-  var grantBase64 = Utilities.base64Encode(blob.getBytes());
-  var data = {
+  const url = `${BASE_URL}/oauth`
+  const blob = Utilities.newBlob("client_id:client_secret")
+  const grantBase64 = Utilities.base64Encode(blob.getBytes());
+  const data = {
     'grant_type': grantBase64
   }
-  var basicAuthToken = '<basic auth token>'
-  var options = {
+  const basicAuthToken = '<basic auth token>'
+  const options = {
     'headers': {
       'Authorization': `Basic ${basicAuthToken}`
       //'Content-Type': 'application/x-www-form-urlencoded'
@@ -44,14 +44,52 @@ function login() {
     'payload': JSON.stringify(data)
   };
   Logger.log(options)
-  // UrlFetchApp.fetch(url, options);
+  // const response = UrlFetchApp.fetch(url, options);
+  // saveUserCredentails('bill', response)
 }
 
-function exampleBase64() {
-  // Instantiates a blob here for clarity
-  var blob = Utilities.newBlob("A string here");
+/**
+ * curl --location --request GET 'https://api.us.int.sterlingcheck.app/v2/packages' \
+    --header 'Authorization: Bearer {{bearer_token}}'
+ */
+function getPackages() {
+  const url = `${BASE_URL}/packages`
+  const token = getUserAcessToken('bill')
+  const options = {
+    'headers': {
+      ...buildAuthorizationHeader(token)
+      //'Content-Type': 'application/json'
+    },
+  }
+  Logger.log(options)
+  // const response = UrlFetchApp.fetch(url, options);
+}
 
-  // Writes 'QSBzdHJpbmcgaGVyZQ==' to the log.
-  var encoded = Utilities.base64Encode(blob.getBytes());
-  Logger.log(encoded);
+/**
+ * curl --location --request POST 'https://api.us.int.sterlingcheck.app/v2/candidates' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {{bearer_token}}' \
+--data-raw '{...}'
+ */
+function createCandidate() {
+  const url = `${BASE_URL}/candidates`
+  const token = getUserAcessToken('bill')
+  const data = {} // we need put the required fields returned in getPackages()
+  const options = {
+    'headers': {
+      ...buildAuthorizationHeader(token)
+      //'Content-Type': 'application/json'
+    },
+    'method': 'post',
+    'contentType': 'application/json',
+    'payload': JSON.stringify(data)
+  }
+  Logger.log(options)
+  // const response = UrlFetchApp.fetch(url, options);
+}
+
+function buildAuthorizationHeader(token) {
+  return {
+    'Authorization': `Bearer ${token}`
+  }
 }
