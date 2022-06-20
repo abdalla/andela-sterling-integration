@@ -26,6 +26,7 @@ const BASE_URL = 'https://api.us.int.sterlingcheck.app/v2'
     https://api.us.int.sterlingcheck.app/v2/oauth
  */
 function login() {
+  Logger.log("Starting login...")
   const url = `${BASE_URL}/oauth`
   const blob = Utilities.newBlob("client_id:client_secret")
   const grantBase64 = Utilities.base64Encode(blob.getBytes());
@@ -46,6 +47,19 @@ function login() {
   // const response = UrlFetchApp.fetch(url, options);
   // saveUserCredentails('bill', response)
   saveUserCredentails('bill', {'access_token': '1234'})
+}
+
+
+function doLoginIfNecessary() {
+  token = getUserAcessToken('bill')
+  if (token == null) {
+    login()
+    return
+  }
+
+  if(isTokenExpired(token)) {
+    login()
+  }
 }
 
 /**
@@ -98,6 +112,7 @@ function buildAuthorizationHeader(token) {
  * Find candidate by email
  */
 function findCandidateByEmail(email) {
+  doLoginIfNecessary()
   const url = `${BASE_URL}/candidates?email=${email}`
   const token = getUserAcessToken('bill')
   const options = {
@@ -116,6 +131,7 @@ function findCandidateByEmail(email) {
  * Find screening by id
  */
 function findScreeningById(id) {
+  doLoginIfNecessary()
   const url = `${BASE_URL}/screenings/${id}`
   const token = getUserAcessToken('bill')
   const options = {

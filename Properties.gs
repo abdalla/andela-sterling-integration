@@ -26,5 +26,10 @@ function getUserAcessToken(userId) {
     return data['access_token']
   } catch (err) {
     Logger.log('Failed with error %s', err.message);
+    return null
   }
+}
+
+function isTokenExpired(token) {
+  return false
 }
