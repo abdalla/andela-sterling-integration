@@ -28,8 +28,3 @@ function getUserAcessToken(userId) {
     Logger.log('Failed with error %s', err.message);
   }
 }
-
-function test() {
-  saveUserCredentails('bill', {'access_token': '1234'})
-  Logger.log(`access_token => ${getUserAcessToken('bill')}`)
-}

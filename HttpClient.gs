@@ -43,10 +43,9 @@ function login() {
     // Convert the JavaScript object to a JSON string.
     'payload': JSON.stringify(data)
   };
-  Logger.log(options)
-  const response = UrlFetchApp.fetch(url, options);
-  Logger.log(response)
+  // const response = UrlFetchApp.fetch(url, options);
   // saveUserCredentails('bill', response)
+  saveUserCredentails('bill', {'access_token': '1234'})
 }
 
 /**
@@ -94,3 +93,40 @@ function buildAuthorizationHeader(token) {
     'Authorization': `Bearer ${token}`
   }
 }
+
+/**
+ * Find candidate by email
+ */
+function findCandidateByEmail(email) {
+  const url = `${BASE_URL}/candidates?email=${email}`
+  const token = getUserAcessToken('bill')
+  const options = {
+    'headers': {
+      ...buildAuthorizationHeader(token)
+      //'Content-Type': 'application/json'
+    },
+    'method': 'get',
+  }
+  // Logger.log(options)
+  // const response = UrlFetchApp.fetch(url, options);
+  return getCandidateByEmailMock(email)
+}
+
+/**
+ * Find screening by id
+ */
+function findScreeningById(id) {
+  const url = `${BASE_URL}/screenings/${id}`
+  const token = getUserAcessToken('bill')
+  const options = {
+    'headers': {
+      ...buildAuthorizationHeader(token)
+      //'Content-Type': 'application/json'
+    },
+    'method': 'get',
+  }
+  // Logger.log(options)
+  // const response = UrlFetchApp.fetch(url, options);
+  return getScreeningByIdMock(id)
+}
+
